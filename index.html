@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Карелия 2025 · 24–26 июля · Бухта Терву</title>
+    <title>Карелия 2026 · 24–26 июля · Бухта Терву</title>
     <meta name="description" content="Выезд на природу 24–26 июля. Бухта Терву, Ладожское озеро. 13 человек.">
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -160,12 +160,13 @@
      style="background: rgba(10,20,14,0.82); backdrop-filter: blur(14px); border-bottom: 1px solid #2e4a38;">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14">
         <a href="#" class="text-sm font-bold tracking-widest uppercase" style="color: #8db082;">
-            Карелия '25
+            Карелия '26
         </a>
         <div class="hidden md:flex items-center gap-6 text-sm" style="color: #6a8f60;">
             <a href="#about"     class="hover:text-white transition-colors">О поездке</a>
             <a href="#location"  class="hover:text-white transition-colors">Локация</a>
             <a href="#timeline"  class="hover:text-white transition-colors">Программа</a>
+            <a href="#shopping"  class="hover:text-white transition-colors">Покупки</a>
             <a href="#checklist" class="hover:text-white transition-colors">Чек-лист</a>
             <a href="#faq"       class="hover:text-white transition-colors">FAQ</a>
         </div>
@@ -195,7 +196,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                           d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                 </svg>
-                24 — 26 июля 2025
+                24 — 26 июля 2026
             </div>
 
             <h1 class="font-black text-white leading-none tracking-tight mb-6"
@@ -464,26 +465,151 @@
 </section>
 
 
+<!-- ════════════ SHOPPING LIST ════════════ -->
+<section id="shopping" class="py-20 px-4 sm:px-6" x-data="Object.assign(shoppingList(), { open: false })">
+    <div class="max-w-5xl mx-auto">
+        <div class="reveal mb-10">
+            <p class="section-label">05 / Список покупок</p>
+            <button @click="open = !open; if(open && items.length === 0) loadItems()"
+                    class="flex items-center gap-3 group w-full text-left">
+                <h2 class="text-4xl md:text-5xl font-bold text-white">Закупки</h2>
+                <svg class="w-7 h-7 mt-1 shrink-0 transition-transform"
+                     :class="open ? 'rotate-180' : ''"
+                     style="color: #4a6741;"
+                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                </svg>
+            </button>
+            <p class="text-lg max-w-xl mt-2" style="color: #8db082;">
+                Отмечай, что уже купил. Список синхронизируется у всех.
+            </p>
+        </div>
+
+        <div x-show="open" x-cloak>
+
+        <!-- Loading -->
+        <div x-show="loading" class="py-12 text-center">
+            <div class="inline-block w-8 h-8 border-2 rounded-full animate-spin mb-3"
+                 style="border-color: #2e4a38; border-top-color: #d4a853;"></div>
+            <p class="text-sm" style="color: #6a8f60;">Загружаем список...</p>
+        </div>
+
+        <!-- Error -->
+        <div x-show="!loading && error" class="card rounded-2xl p-6 text-center max-w-sm">
+            <p class="text-2xl mb-2">⚠️</p>
+            <p class="text-white font-semibold mb-1">Не удалось загрузить</p>
+            <p class="text-sm mb-4" style="color: #6a8f60;">Проверь соединение или подожди</p>
+            <button @click="loadItems()"
+                    class="btn-gold text-sm py-2 px-5" style="border-radius:0.5rem;">
+                Повторить
+            </button>
+        </div>
+
+        <!-- Content -->
+        <div x-show="!loading && !error" x-cloak>
+
+            <!-- Name input -->
+            <div class="mb-8 max-w-xs">
+                <label class="section-label block mb-2">Твоё имя</label>
+                <input x-model="myName"
+                       @input="localStorage.setItem('trip_buyer_name', myName)"
+                       type="text"
+                       placeholder="Введи один раз — запомним"
+                       class="w-full rounded-xl px-4 py-2.5 text-sm outline-none"
+                       style="background:#2e4a38; color:#e0e0e0; border:1px solid #4a6741;">
+            </div>
+
+            <!-- Progress -->
+            <div class="mb-8 max-w-xl">
+                <div class="flex justify-between text-sm mb-2" style="color: #6a8f60;">
+                    <span>Куплено</span>
+                    <span x-text="boughtCount + ' из ' + items.length"></span>
+                </div>
+                <div class="h-1.5 rounded-full overflow-hidden" style="background: #2e4a38;">
+                    <div class="h-full rounded-full transition-all duration-700"
+                         style="background: #d4a853;"
+                         :style="'width:' + progressPct + '%'"></div>
+                </div>
+            </div>
+
+            <!-- Items by category -->
+            <template x-for="cat in categoriesList" :key="cat">
+                <div class="mb-8">
+                    <div class="flex items-center justify-between mb-3">
+                        <p class="section-label" x-text="cat"></p>
+                        <p class="text-xs" style="color: #4a6741;">
+                            <span x-text="catBought(cat)"></span>/<span x-text="itemsByCategory[cat].length"></span>
+                        </p>
+                    </div>
+                    <div class="grid sm:grid-cols-2 gap-2 max-w-2xl">
+                        <template x-for="item in itemsByCategory[cat]" :key="item.row">
+                            <div class="card rounded-xl p-4 flex items-center justify-between gap-3 cursor-pointer"
+                                 :class="item.bought ? 'opacity-50' : ''"
+                                 @click="handleClick(item)">
+                                <div class="flex items-center gap-3 min-w-0">
+                                    <div class="w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-all"
+                                         :style="item.bought ? 'background:#d4a853;border-color:#d4a853;' : 'border-color:#4a6741;'">
+                                        <svg x-show="item.bought" class="w-2.5 h-2.5" style="color:#0f1c14;"
+                                             fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3.5" d="M5 13l4 4L19 7"/>
+                                        </svg>
+                                    </div>
+                                    <span class="text-sm truncate"
+                                          :class="item.bought ? 'line-through' : ''"
+                                          :style="item.bought ? 'color:#4a6741;' : 'color:#e0e0e0;'"
+                                          x-text="item.name"></span>
+                                </div>
+                                <span x-show="item.buyer" x-text="item.buyer"
+                                      class="text-xs shrink-0" style="color:#6a8f60;"></span>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </template>
+
+            <p class="text-xs" style="color: #2e4a38;">
+                Обновляется каждые 30 сек
+                <span x-show="lastUpdated" x-text="' · ' + lastUpdated"></span>
+            </p>
+        </div>
+        </div> <!-- /x-show="open" -->
+    </div>
+
+</section>
+
+
 <!-- ════════════ CHECKLIST ════════════ -->
 <section id="checklist" class="py-20 px-4 sm:px-6" x-data="checklist()">
     <div class="max-w-5xl mx-auto">
         <div class="reveal mb-10">
-            <p class="section-label">05 / Чек-лист</p>
+            <p class="section-label">06 / Чек-лист</p>
             <h2 class="text-4xl md:text-5xl font-bold text-white mb-4">Что взять</h2>
             <p class="text-lg max-w-xl" style="color: #8db082;">
                 Нажимай — отмечай, что уже собрал.
             </p>
         </div>
 
+        <!-- Readiness bar -->
+        <div class="card rounded-2xl p-5 max-w-xl mb-8">
+            <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-semibold text-white">Готовность к поездке</span>
+                <span class="text-sm font-bold" :style="'color:' + readinessColor" x-text="readiness + '%'"></span>
+            </div>
+            <div class="h-3 rounded-full overflow-hidden mb-3" style="background:#2e4a38;">
+                <div class="h-full rounded-full transition-all duration-700"
+                     :style="'width:' + readiness + '%; background:' + readinessColor"></div>
+            </div>
+            <p class="text-sm" :style="'color:' + readinessColor" x-text="readinessMessage"></p>
+        </div>
+
         <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-2.5 max-w-3xl">
             <template x-for="(item, i) in items" :key="i">
-                <div class="card rounded-xl p-4 flex items-center gap-3 checklist-item"
+                <div class="rounded-xl p-4 flex items-center gap-3 checklist-item"
                      :class="item.done ? 'done' : ''"
-                     @click="items[i].done = !items[i].done">
+                     :style="cardStyle(item)"
+                     @click="toggle(i)">
                     <div class="w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-all"
-                         :style="item.done
-                             ? 'background:#d4a853; border-color:#d4a853;'
-                             : 'border-color:#4a6741; background:transparent;'">
+                         :style="item.done ? 'background:#d4a853;border-color:#d4a853;' : checkboxBorder(item)">
                         <svg x-show="item.done" class="w-2.5 h-2.5" style="color:#0f1c14;"
                              fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3.5" d="M5 13l4 4L19 7"/>
@@ -491,14 +617,14 @@
                     </div>
                     <span class="text-sm"
                           :class="item.done ? 'line-through' : ''"
-                          :style="item.done ? 'color:#4a6741;' : 'color:#b5ceaf;'"
-                          x-text="item.label">
+                          :style="item.done ? 'color:#4a6741;' : labelColor(item)"
+                          x-text="item.label + (item.type === 'important' ? ' ⚡' : item.type === 'critical' ? ' 🌟' : '')">
                     </span>
                 </div>
             </template>
         </div>
 
-        <button @click="items.forEach(i => i.done = false)"
+        <button @click="resetAll()"
                 class="mt-5 text-sm transition-colors hover:text-white"
                 style="color: #4a6741;">
             Сбросить всё
@@ -587,7 +713,7 @@
 <footer class="py-16 px-4 sm:px-6" style="background: #0f1c14; border-top: 1px solid #2e4a38;">
     <div class="max-w-5xl mx-auto text-center">
         <p class="text-3xl font-bold text-white mb-2">До встречи в Карелии 🌲</p>
-        <p class="text-lg mb-8" style="color: #6a8f60;">24 — 26 июля 2025 · Бухта Терву · Ладога</p>
+        <p class="text-lg mb-8" style="color: #6a8f60;">24 — 26 июля 2026 · Бухта Терву · Ладога</p>
         <div class="flex flex-col sm:flex-row gap-3 justify-center items-center">
             <a href="https://t.me/ruslansd" target="_blank" class="btn-gold">
                 <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
@@ -609,23 +735,159 @@
 
 <!-- ════════════ SCRIPTS ════════════ -->
 <script>
+    // ── Shopping List ──
+    function shoppingList() {
+        return {
+            items: [],
+            loading: true,
+            error: false,
+            myName: localStorage.getItem('trip_buyer_name') || '',
+            lastUpdated: '',
+            scriptUrl: 'https://script.google.com/macros/s/AKfycbyN7lW_CE0lSyuMYl3D8aRA89FZZbDU3Jx0ycYa-DPenL6c1b0hdlbynJaD_pJNMPoL/exec',
+
+            init() {
+                this.loadItems();
+                setInterval(() => this.loadItems(), 30000);
+            },
+
+            async loadItems() {
+                try {
+                    const res = await fetch(this.scriptUrl);
+                    const data = await res.json();
+                    this.items = data.items || [];
+                    this.error = false;
+                    const now = new Date();
+                    this.lastUpdated = 'обновлено в ' + now.getHours() + ':' + String(now.getMinutes()).padStart(2, '0');
+                } catch (e) {
+                    this.error = true;
+                } finally {
+                    this.loading = false;
+                }
+            },
+
+            get boughtCount() {
+                return this.items.filter(i => i.bought).length;
+            },
+
+            get progressPct() {
+                return this.items.length ? Math.round(this.boughtCount / this.items.length * 100) : 0;
+            },
+
+            get itemsByCategory() {
+                const groups = {};
+                this.items.forEach(item => {
+                    const cat = item.category || 'Прочее';
+                    if (!groups[cat]) groups[cat] = [];
+                    groups[cat].push(item);
+                });
+                Object.keys(groups).forEach(cat => {
+                    groups[cat].sort((a, b) => a.bought - b.bought);
+                });
+                return groups;
+            },
+
+            get categoriesList() {
+                return Object.keys(this.itemsByCategory);
+            },
+
+            catBought(cat) {
+                return (this.itemsByCategory[cat] || []).filter(i => i.bought).length;
+            },
+
+            handleClick(item) {
+                if (item.bought) {
+                    item.bought = false;
+                    item.buyer = '';
+                    this.saveToSheet(item.row, false, '');
+                } else {
+                    item.bought = true;
+                    item.buyer = this.myName;
+                    this.saveToSheet(item.row, true, this.myName);
+                }
+            },
+
+            saveToSheet(row, bought, buyer) {
+                fetch(this.scriptUrl, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: JSON.stringify({ row, bought, buyer })
+                }).catch(() => {});
+            }
+        }
+    }
+
     // ── Checklist ──
     function checklist() {
+        const ITEMS = [
+            { label: 'Паспорт / документы',          type: 'important' },
+            { label: 'Удобная обувь для леса',        type: 'important' },
+            { label: 'Дождевик или ветровка',         type: 'important' },
+            { label: 'Наличные (небольшой запас)',    type: 'normal'    },
+            { label: 'Тёплая кофта (ночью прохладно)', type: 'normal'  },
+            { label: 'Купальник / плавки',            type: 'normal'    },
+            { label: 'Солнцезащитный крем',           type: 'normal'    },
+            { label: 'Зарядка + павербанк',           type: 'normal'    },
+            { label: 'Любимая настолка',              type: 'normal'    },
+            { label: 'Хорошее настроение',            type: 'critical'  },
+        ];
+        const saved = JSON.parse(localStorage.getItem('trip_checklist_v2') || '[]');
         return {
-            items: [
-                { label: 'Паспорт / документы',         done: false },
-                { label: 'Наличные (небольшой запас)',   done: false },
-                { label: 'Удобная обувь для леса',       done: false },
-                { label: 'Дождевик или ветровка',        done: false },
-                { label: 'Тёплая кофта (ночью прохладно)', done: false },
-                { label: 'Купальник / плавки',           done: false },
-                { label: 'Полотенце',                    done: false },
-                { label: 'Средство от комаров',          done: false },
-                { label: 'Солнцезащитный крем',          done: false },
-                { label: 'Зарядка + павербанк',          done: false },
-                { label: 'Любимая настолка',             done: false },
-                { label: 'Хорошее настроение',           done: false },
-            ]
+            items: ITEMS.map((item, i) => ({ ...item, done: saved[i] || false })),
+
+            get passportDone() { return this.items[0].done; },
+            get moodDone()     { return this.items[this.items.length - 1].done; },
+
+            get readiness() {
+                if (this.passportDone && this.moodDone) {
+                    const others = this.items.filter((it, i) => i !== 0 && i !== this.items.length - 1);
+                    const bonusPct = Math.round((others.filter(it => it.done).length / others.length) * 20);
+                    return 80 + bonusPct;
+                }
+                const score = this.items.filter(it => it.done).length;
+                return Math.min(Math.round(score / this.items.length * 50), 50);
+            },
+
+            get readinessMessage() {
+                if (this.passportDone && this.moodDone) return 'Главное есть — можно ехать! 🚀';
+                if (this.moodDone && !this.passportDone) return 'Настроение огонь! Но без паспорта далеко не уедешь 😅';
+                if (this.passportDone && !this.moodDone) return 'Документы есть. Без настроения — зачем? 😐';
+                return 'Начни с хорошего настроения 😄';
+            },
+
+            get readinessColor() {
+                if (this.readiness >= 95) return '#4ade80';
+                if (this.readiness >= 80) return '#d4a853';
+                return '#4a6741';
+            },
+
+            cardStyle(item) {
+                const base = 'background:#243b2e; border:1px solid ';
+                if (item.type === 'critical') return base + '#4ade80; box-shadow: 0 0 12px rgba(74,222,128,0.15);';
+                if (item.type === 'important') return base + '#d4a853; box-shadow: 0 0 8px rgba(212,168,83,0.1);';
+                return base + '#2e4a38;';
+            },
+
+            checkboxBorder(item) {
+                if (item.type === 'critical')  return 'border-color:#4ade80;';
+                if (item.type === 'important') return 'border-color:#d4a853;';
+                return 'border-color:#4a6741;';
+            },
+
+            labelColor(item) {
+                if (item.type === 'critical')  return 'color:#4ade80;';
+                if (item.type === 'important') return 'color:#d4a853;';
+                return 'color:#b5ceaf;';
+            },
+
+            toggle(i) {
+                this.items[i].done = !this.items[i].done;
+                localStorage.setItem('trip_checklist_v2', JSON.stringify(this.items.map(it => it.done)));
+            },
+
+            resetAll() {
+                this.items.forEach(it => it.done = false);
+                localStorage.removeItem('trip_checklist_v2');
+            }
         }
     }
 
