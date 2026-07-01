@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Карелия 2026 · 24–26 июля · Бухта Терву</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌲</text></svg>">
     <meta name="description" content="Выезд на природу 24–26 июля. Бухта Терву, Ладожское озеро. 13 человек.">
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -568,7 +569,13 @@
             </template>
 
             <p class="text-xs" style="color: #2e4a38;">
-                Обновляется каждые 30 сек
+                <button @click="loadItems()" class="inline-flex items-center gap-1 hover:text-white transition-colors">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                    </svg>
+                    Обновить
+                </button>
                 <span x-show="lastUpdated" x-text="' · ' + lastUpdated"></span>
             </p>
         </div>
@@ -819,6 +826,7 @@
     // ── Checklist ──
     function checklist() {
         const ITEMS = [
+            { label: 'Хорошее настроение',            type: 'critical'  },
             { label: 'Паспорт / документы',          type: 'important' },
             { label: 'Удобная обувь для леса',        type: 'important' },
             { label: 'Дождевик или ветровка',         type: 'important' },
@@ -828,14 +836,13 @@
             { label: 'Солнцезащитный крем',           type: 'normal'    },
             { label: 'Зарядка + павербанк',           type: 'normal'    },
             { label: 'Любимая настолка',              type: 'normal'    },
-            { label: 'Хорошее настроение',            type: 'critical'  },
         ];
         const saved = JSON.parse(localStorage.getItem('trip_checklist_v2') || '[]');
         return {
             items: ITEMS.map((item, i) => ({ ...item, done: saved[i] || false })),
 
-            get passportDone() { return this.items[0].done; },
-            get moodDone()     { return this.items[this.items.length - 1].done; },
+            get passportDone() { return this.items.find(i => i.label.startsWith('Паспорт'))?.done || false; },
+            get moodDone()     { return this.items.find(i => i.label.startsWith('Хорошее'))?.done || false; },
 
             get readiness() {
                 if (this.passportDone && this.moodDone) {
