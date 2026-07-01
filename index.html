@@ -784,7 +784,7 @@
                     <span class="text-sm"
                           :class="item.done ? 'line-through' : ''"
                           :style="item.done ? 'color:#4a6741;' : labelColor(item)"
-                          x-text="item.label + (item.type === 'important' ? ' ⚡' : item.type === 'critical' ? ' 🌟' : '')">
+                          x-text="item.label + (item.type === 'required' ? ' ❗' : item.type === 'important' ? ' ⚡' : item.type === 'critical' ? ' 🌟' : '')">
                     </span>
                 </div>
             </template>
@@ -840,7 +840,7 @@
                 <span class="text-2xl shrink-0">📶</span>
                 <div>
                     <h4 class="text-white font-semibold mb-1">Связь на базе</h4>
-                    <p class="text-sm" style="color: #6a8f60;">Работает только <strong style="color:#b5ceaf;">Мегафон, Йота, МТС</strong>. Wi-Fi слабый и нестабильный — рассчитывай на мобильный интернет.</p>
+                    <p class="text-sm" style="color: #6a8f60;">Работает только <strong style="color:#b5ceaf;">Мегафон, Yota, МТС</strong>. Wi-Fi слабый и нестабильный — рассчитывай на мобильный интернет.</p>
                 </div>
             </div>
         </div>
@@ -858,7 +858,8 @@
                         <li>→ Оформляется <strong style="color:#b5ceaf;">персонально</strong>, онлайн</li>
                         <li>→ Имеет смысл брать только на <strong style="color:#b5ceaf;">субботу 25 июля</strong></li>
                         <li>→ Нужен тип: <strong style="color:#b5ceaf;">«для судов и плавучих объектов»</strong></li>
-                        <li>→ Если не выходишь за территорию базы — разрешение не нужно</li>
+                        <li>→ Если не катаешься на воде — можно не брать, но на свой риск. По факту никогда не спрашивали</li>
+                        <li>→ Для <strong style="color:#b5ceaf;">плавания на лодке и сапе</strong> — обязательно</li>
                     </ul>
                     <div class="flex flex-wrap gap-2">
                         <a href="https://pay.parkladoga.ru/permission" target="_blank"
@@ -1023,7 +1024,7 @@
     function checklist() {
         const ITEMS = [
             { label: 'Хорошее настроение',            type: 'critical'  },
-            { label: 'Паспорт / документы',          type: 'important' },
+            { label: 'Паспорт / документы',          type: 'required'  },
             { label: 'Удобная обувь для леса',        type: 'important' },
             { label: 'Дождевик или ветровка',         type: 'important' },
             { label: 'Наличные (небольшой запас)',    type: 'normal'    },
@@ -1065,18 +1066,21 @@
 
             cardStyle(item) {
                 const base = 'background:#243b2e; border:1px solid ';
-                if (item.type === 'critical') return base + '#4ade80; box-shadow: 0 0 12px rgba(74,222,128,0.15);';
+                if (item.type === 'required')  return base + '#f87171; box-shadow: 0 0 12px rgba(248,113,113,0.18);';
+                if (item.type === 'critical')  return base + '#4ade80; box-shadow: 0 0 12px rgba(74,222,128,0.15);';
                 if (item.type === 'important') return base + '#d4a853; box-shadow: 0 0 8px rgba(212,168,83,0.1);';
                 return base + '#2e4a38;';
             },
 
             checkboxBorder(item) {
+                if (item.type === 'required')  return 'border-color:#f87171;';
                 if (item.type === 'critical')  return 'border-color:#4ade80;';
                 if (item.type === 'important') return 'border-color:#d4a853;';
                 return 'border-color:#4a6741;';
             },
 
             labelColor(item) {
+                if (item.type === 'required')  return 'color:#f87171;';
                 if (item.type === 'critical')  return 'color:#4ade80;';
                 if (item.type === 'important') return 'color:#d4a853;';
                 return 'color:#b5ceaf;';
