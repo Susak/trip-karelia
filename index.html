@@ -6,6 +6,7 @@
     <title>Карелия 2026 · 24–26 июля · Бухта Терву</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌲</text></svg>">
     <meta name="description" content="Выезд на природу 24–26 июля. Бухта Терву, Ладожское озеро. 13 человек.">
+    <meta name="robots" content="noindex, nofollow">
 
     <meta property="og:title" content="Карелия 2026 · 24–26 июля · Бухта Терву">
     <meta property="og:description" content="Выезд на природу 24–26 июля. Бухта Терву, Ладожское озеро. 13 человек.">
@@ -705,6 +706,7 @@
                         <template x-for="item in itemsByCategory[cat]" :key="item.row">
                             <div class="card rounded-xl p-4 flex items-center justify-between gap-3 cursor-pointer"
                                  :class="item.bought ? 'opacity-50' : ''"
+                                 :style="!item.bought && item.name && item.name.toLowerCase().includes('пиво') ? 'border-color:#d4a853;box-shadow:0 0 10px rgba(212,168,83,0.2);' : ''"
                                  @click="handleClick(item)">
                                 <div class="flex items-center gap-3 min-w-0">
                                     <div class="w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-all"
@@ -915,9 +917,13 @@
 
 
 <!-- ════════════ FOOTER ════════════ -->
-<footer class="py-16 px-4 sm:px-6" style="background: #0f1c14; border-top: 1px solid #2e4a38;">
+<footer class="py-16 px-4 sm:px-6" style="background: #0f1c14; border-top: 1px solid #2e4a38;"
+        x-data="beerCounter()">
     <div class="max-w-5xl mx-auto text-center">
-        <p class="text-3xl font-bold text-white mb-2">До встречи в Карелии 🌲</p>
+        <p class="text-3xl font-bold text-white mb-2">
+            До встречи в Карелии
+            <span @click="tap()" class="cursor-pointer select-none">🌲</span>
+        </p>
         <p class="text-lg mb-8" style="color: #6a8f60;">24 — 26 июля 2026 · Бухта Терву · Ладога</p>
         <div class="flex flex-col sm:flex-row gap-3 justify-center items-center">
             <a href="https://t.me/ruslansd" target="_blank" class="btn-gold">
@@ -933,6 +939,25 @@
         <p class="mt-10 text-xs" style="color: #2e4a38;">
             Организатор: @ruslansd · Telegram или Яндекс Мессенджер
         </p>
+
+        <!-- Easter egg: beer counter -->
+        <div x-show="unlocked" x-cloak
+             x-transition:enter="transition ease-out duration-500"
+             x-transition:enter-start="opacity-0 translate-y-4"
+             x-transition:enter-end="opacity-1 translate-y-0"
+             class="mt-10 inline-block card rounded-2xl p-6" style="min-width:220px;">
+            <p class="section-label mb-4">🍺 Счётчик организатора</p>
+            <div class="flex items-center justify-center gap-6 mb-4">
+                <button @click="dec()"
+                        class="w-11 h-11 rounded-full text-2xl font-bold flex items-center justify-center transition-all hover:brightness-125"
+                        style="background:#2e4a38;color:#b5ceaf;">−</button>
+                <span class="font-black text-white tabular-nums" style="font-size:3.5rem;line-height:1;" x-text="beers"></span>
+                <button @click="inc()"
+                        class="w-11 h-11 rounded-full text-2xl font-bold flex items-center justify-center transition-all hover:brightness-110"
+                        style="background:#d4a853;color:#0f1c14;">+</button>
+            </div>
+            <p class="text-sm italic" style="color:#8db082;" x-text="msg"></p>
+        </div>
     </div>
 </footer>
 
@@ -1127,8 +1152,38 @@
                     q: 'Нужно ли что-то организовывать самому?',
                     a: 'Нет, всё основное берём на себя. Твоя задача — приехать, предложить активность, если хочешь.'
                 },
+                {
+                    q: 'Что пить? 🍺',
+                    a: 'Пиво. Организатор берёт личную ответственность за качество выбора. Остальное — по желанию, но пиво обязательно.'
+                },
             ]
         }
+    }
+
+    // ── Beer counter easter egg ──
+    function beerCounter() {
+        return {
+            clicks: 0,
+            unlocked: localStorage.getItem('trip_tree') === '1',
+            beers: parseInt(localStorage.getItem('trip_beers') || '0'),
+            tap() {
+                this.clicks++;
+                if (this.clicks >= 5) {
+                    this.unlocked = true;
+                    localStorage.setItem('trip_tree', '1');
+                }
+            },
+            inc() { this.beers++; localStorage.setItem('trip_beers', this.beers); },
+            dec() { if (this.beers > 0) { this.beers--; localStorage.setItem('trip_beers', this.beers); } },
+            get msg() {
+                if (this.beers === 0) return 'Поездка ещё не началась...';
+                if (this.beers === 1) return 'Хорошее начало 👍';
+                if (this.beers <= 3)  return 'Вошёл во вкус';
+                if (this.beers <= 6)  return 'Это уже серьёзно';
+                if (this.beers <= 9)  return 'Легенда вечеринки 🏅';
+                return 'Без комментариев 🏆';
+            }
+        };
     }
 
     // ── Countdown ──
