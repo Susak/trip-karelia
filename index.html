@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Карелия 2025 · 24–26 июля · Бухта Терву</title>
+    <meta name="description" content="Выезд на природу 24–26 июля. Бухта Терву, Ладожское озеро. 13 человек.">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        f950: '#0f1c14',
+                        f900: '#1a2e22',
+                        f800: '#243b2e',
+                        f700: '#2e4a38',
+                        f600: '#3a5c46',
+                        f500: '#4a6741',
+                        f400: '#6a8f60',
+                        f300: '#8db082',
+                        f200: '#b5ceaf',
+                        f100: '#dcebd9',
+                        gold: '#d4a853',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300..900;1,14..32,300..900&display=swap" rel="stylesheet">
+
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
+
+    <style>
+        body {
+            background-color: #1a2e22;
+            color: #e0e0e0;
+        }
+
+        .hero-bg {
+            background:
+                linear-gradient(to bottom, rgba(10,20,14,0.55) 0%, rgba(26,46,34,0.92) 70%, #1a2e22 100%),
+                radial-gradient(ellipse at 15% 85%, rgba(74,103,65,0.35) 0%, transparent 55%),
+                radial-gradient(ellipse at 85% 15%, rgba(15,28,20,0.7) 0%, transparent 60%),
+                linear-gradient(135deg, #0a1410 0%, #1a2e22 50%, #243b2e 100%);
+        }
+
+        .card {
+            background-color: #243b2e;
+            border: 1px solid #2e4a38;
+            transition: border-color 0.2s;
+        }
+        .card:hover { border-color: #4a6741; }
+
+        .timeline-item { position: relative; }
+        .timeline-item:not(:last-child)::before {
+            content: '';
+            position: absolute;
+            left: 1.125rem;
+            top: 2.75rem;
+            height: calc(100% - 0.75rem);
+            width: 2px;
+            background: linear-gradient(to bottom, #4a6741, rgba(74,103,65,0.15));
+        }
+
+        .tag {
+            background: #2e4a38;
+            color: #b5ceaf;
+            border-radius: 9999px;
+            padding: 0.375rem 1rem;
+            font-size: 0.875rem;
+            display: inline-block;
+        }
+
+        .btn-gold {
+            background: #d4a853;
+            color: #0f1c14;
+            font-weight: 700;
+            border-radius: 0.75rem;
+            padding: 0.875rem 1.75rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.625rem;
+            font-size: 1rem;
+            transition: filter 0.2s;
+        }
+        .btn-gold:hover { filter: brightness(1.1); }
+
+        .btn-outline {
+            border: 1px solid #4a6741;
+            color: #b5ceaf;
+            font-weight: 500;
+            border-radius: 0.75rem;
+            padding: 0.875rem 1.75rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+            transition: border-color 0.2s, color 0.2s;
+        }
+        .btn-outline:hover { border-color: #6a8f60; color: white; }
+
+        .section-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #6a8f60;
+            margin-bottom: 0.5rem;
+        }
+
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #1a2e22; }
+        ::-webkit-scrollbar-thumb { background: #4a6741; border-radius: 3px; }
+
+        [x-cloak] { display: none !important; }
+
+        .checklist-item {
+            cursor: pointer;
+            user-select: none;
+            transition: opacity 0.2s;
+        }
+        .checklist-item.done { opacity: 0.45; }
+
+        .faq-answer {
+            overflow: hidden;
+            transition: max-height 0.3s ease, opacity 0.3s ease;
+            max-height: 0;
+            opacity: 0;
+        }
+        .faq-answer.open {
+            max-height: 200px;
+            opacity: 1;
+        }
+
+        /* Scroll fade-in */
+        .reveal {
+            opacity: 0;
+            transform: translateY(18px);
+            transition: opacity 0.55s ease, transform 0.55s ease;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+
+<body class="font-sans antialiased">
+
+<!-- ════════════ NAVIGATION ════════════ -->
+<nav class="fixed top-0 inset-x-0 z-50"
+     style="background: rgba(10,20,14,0.82); backdrop-filter: blur(14px); border-bottom: 1px solid #2e4a38;">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14">
+        <a href="#" class="text-sm font-bold tracking-widest uppercase" style="color: #8db082;">
+            Карелия '25
+        </a>
+        <div class="hidden md:flex items-center gap-6 text-sm" style="color: #6a8f60;">
+            <a href="#about"     class="hover:text-white transition-colors">О поездке</a>
+            <a href="#location"  class="hover:text-white transition-colors">Локация</a>
+            <a href="#timeline"  class="hover:text-white transition-colors">Программа</a>
+            <a href="#checklist" class="hover:text-white transition-colors">Чек-лист</a>
+            <a href="#faq"       class="hover:text-white transition-colors">FAQ</a>
+        </div>
+        <a href="https://t.me/ruslansd" target="_blank"
+           class="text-sm font-bold px-4 py-1.5 rounded-full transition-all hover:brightness-110"
+           style="background: #d4a853; color: #0f1c14;">
+            Написать
+        </a>
+    </div>
+</nav>
+
+
+<!-- ════════════ HERO ════════════ -->
+<section class="hero-bg min-h-screen flex items-center relative overflow-hidden pt-14">
+    <!-- Glow blobs -->
+    <div class="absolute top-24 right-0 w-72 h-72 rounded-full pointer-events-none"
+         style="background: radial-gradient(circle, rgba(74,103,65,0.18), transparent); filter: blur(50px);"></div>
+    <div class="absolute bottom-40 -left-20 w-96 h-96 rounded-full pointer-events-none"
+         style="background: radial-gradient(circle, rgba(212,168,83,0.10), transparent); filter: blur(70px);"></div>
+
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 py-28 md:py-36 relative z-10">
+        <div class="max-w-2xl">
+            <!-- Date pill -->
+            <div class="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-semibold mb-7"
+                 style="background: rgba(212,168,83,0.12); color: #d4a853; border: 1px solid rgba(212,168,83,0.28);">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+                24 — 26 июля 2025
+            </div>
+
+            <h1 class="font-black text-white leading-none tracking-tight mb-6"
+                style="font-size: clamp(3rem, 10vw, 5.5rem);">
+                Карелия.<br>
+                <span style="color: #6a8f60;">Бухта<br>Терву.</span>
+            </h1>
+
+            <p class="text-xl mb-10 leading-relaxed max-w-md" style="color: #b5ceaf;">
+                13 человек, 2 ночи на Ладоге.<br>
+                Лес, вода и хорошая компания.
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-3">
+                <a href="https://t.me/ruslansd" target="_blank" class="btn-gold">
+                    <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                    </svg>
+                    Написать организатору
+                </a>
+                <a href="https://tervu.ru/" target="_blank" class="btn-outline">
+                    Сайт бухты →
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="absolute bottom-0 inset-x-0 h-28 pointer-events-none"
+         style="background: linear-gradient(to top, #1a2e22, transparent);"></div>
+</section>
+
+
+<!-- ════════════ ABOUT ════════════ -->
+<section id="about" class="py-20 px-4 sm:px-6">
+    <div class="max-w-5xl mx-auto">
+        <div class="reveal mb-12">
+            <p class="section-label">01 / О поездке</p>
+            <h2 class="text-4xl md:text-5xl font-bold text-white mb-4">Что нас ждёт</h2>
+            <p class="text-lg max-w-xl" style="color: #8db082;">
+                Выбираемся на три дня — отключиться от города, побыть на природе и провести время вместе в хорошей компании.
+            </p>
+        </div>
+
+        <div class="reveal grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+            <div class="card rounded-2xl p-5">
+                <div class="text-3xl mb-3">📅</div>
+                <p class="section-label">Даты</p>
+                <p class="text-white font-bold text-lg">24–26 июля</p>
+                <p class="text-sm mt-0.5" style="color: #6a8f60;">2 ночи</p>
+            </div>
+            <div class="card rounded-2xl p-5">
+                <div class="text-3xl mb-3">👥</div>
+                <p class="section-label">Компания</p>
+                <p class="text-white font-bold text-lg">13 человек</p>
+                <p class="text-sm mt-0.5" style="color: #6a8f60;">своя тусовка</p>
+            </div>
+            <div class="card rounded-2xl p-5">
+                <div class="text-3xl mb-3">🌊</div>
+                <p class="section-label">Место</p>
+                <p class="text-white font-bold text-lg">Ладога</p>
+                <p class="text-sm mt-0.5" style="color: #6a8f60;">Карельский перешеек</p>
+            </div>
+            <div class="card rounded-2xl p-5">
+                <div class="text-3xl mb-3">🚌</div>
+                <p class="section-label">Старт</p>
+                <p class="text-white font-bold text-lg">Офис Яндекса</p>
+                <p class="text-sm mt-0.5" style="color: #6a8f60;">детали позже</p>
+            </div>
+        </div>
+
+        <div class="reveal card rounded-2xl p-6 sm:p-8">
+            <p class="section-label mb-4">Чем займёмся</p>
+            <div class="flex flex-wrap gap-2">
+                <span class="tag">🍳 Готовим вместе</span>
+                <span class="tag">🎲 Настолки</span>
+                <span class="tag">🚶 Прогулки</span>
+                <span class="tag">💬 Разговоры</span>
+                <span class="tag">🏊 Купание</span>
+                <span class="tag">🌙 Вечерние посиделки</span>
+                <span class="tag">✨ Придумаем ещё</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ════════════ LOCATION ════════════ -->
+<section id="location" class="py-20 px-4 sm:px-6" style="background: rgba(10,20,14,0.4);">
+    <div class="max-w-5xl mx-auto">
+        <div class="reveal mb-10">
+            <p class="section-label">02 / Локация</p>
+            <h2 class="text-4xl md:text-5xl font-bold text-white mb-4">Бухта Терву</h2>
+            <p class="text-lg max-w-xl" style="color: #8db082;">
+                База отдыха на берегу Ладожского озера. Собственный пляж, беседки, баня.
+            </p>
+        </div>
+
+        <div class="reveal grid md:grid-cols-5 gap-4">
+            <!-- Map -->
+            <div class="md:col-span-3 rounded-2xl overflow-hidden" style="height: 320px; border: 1px solid #2e4a38;">
+                <iframe
+                    src="https://yandex.ru/map-widget/v1/?ll=30.110127%2C61.308498&z=14&pt=30.110127,61.308498,pm2rdm&l=map"
+                    width="100%" height="100%" frameborder="0" allowfullscreen
+                    title="Бухта Терву на карте" loading="lazy">
+                </iframe>
+            </div>
+
+            <!-- Info cards -->
+            <div class="md:col-span-2 flex flex-col gap-3">
+                <div class="card rounded-2xl p-5 flex-1">
+                    <p class="section-label mb-2">Что есть на базе</p>
+                    <ul class="space-y-1.5 text-sm" style="color: #b5ceaf;">
+                        <li class="flex items-center gap-2"><span style="color: #d4a853;">✓</span> Пляж на Ладоге</li>
+                        <li class="flex items-center gap-2"><span style="color: #d4a853;">✓</span> Баня</li>
+                        <li class="flex items-center gap-2"><span style="color: #d4a853;">✓</span> Беседки с мангалами</li>
+                        <li class="flex items-center gap-2"><span style="color: #d4a853;">✓</span> Оборудованная кухня</li>
+                    </ul>
+                </div>
+                <div class="card rounded-2xl p-5">
+                    <p class="section-label mb-3">Открыть</p>
+                    <div class="flex flex-col gap-2.5">
+                        <a href="https://tervu.ru/" target="_blank"
+                           class="flex items-center gap-2 text-sm hover:underline transition-colors"
+                           style="color: #d4a853;">
+                            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9"/>
+                            </svg>
+                            tervu.ru — официальный сайт
+                        </a>
+                        <a href="https://yandex.ru/maps/org/bukhta_tervu/204290815378/?ll=30.110127%2C61.308498&z=17.2"
+                           target="_blank"
+                           class="flex items-center gap-2 text-sm hover:underline transition-colors"
+                           style="color: #d4a853;">
+                            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                            Яндекс Карты
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ════════════ TIMELINE ════════════ -->
+<section id="timeline" class="py-20 px-4 sm:px-6">
+    <div class="max-w-5xl mx-auto">
+        <div class="reveal mb-12">
+            <p class="section-label">03 / Программа</p>
+            <h2 class="text-4xl md:text-5xl font-bold text-white mb-4">Три дня</h2>
+            <p class="text-lg max-w-xl" style="color: #8db082;">
+                Расписание примерное — главное, что мы там будем.
+            </p>
+        </div>
+
+        <div class="reveal max-w-xl space-y-0">
+
+            <div class="timeline-item pl-14 pb-10">
+                <div class="absolute left-0 top-0 w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm shrink-0"
+                     style="background: #d4a853; color: #0f1c14;">1</div>
+                <p class="text-xs font-semibold uppercase tracking-widest mb-1" style="color: #d4a853;">Чт, 24 июля</p>
+                <h3 class="text-white text-2xl font-bold mb-4">Заезд</h3>
+                <div class="space-y-2.5">
+                    <div class="flex gap-4">
+                        <span class="text-sm w-20 shrink-0 mt-0.5" style="color: #4a6741;">с 14:00</span>
+                        <span style="color: #b5ceaf;">Прибытие, расселение, знакомство с базой</span>
+                    </div>
+                    <div class="flex gap-4">
+                        <span class="text-sm w-20 shrink-0 mt-0.5" style="color: #4a6741;">вечером</span>
+                        <span style="color: #b5ceaf;">Совместный ужин, костёр, первые разговоры</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item pl-14 pb-10">
+                <div class="absolute left-0 top-0 w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm shrink-0"
+                     style="background: #4a6741; color: white;">2</div>
+                <p class="text-xs font-semibold uppercase tracking-widest mb-1" style="color: #6a8f60;">Пт, 25 июля</p>
+                <h3 class="text-white text-2xl font-bold mb-4">Полный день</h3>
+                <div class="space-y-2.5">
+                    <div class="flex gap-4">
+                        <span class="text-sm w-20 shrink-0 mt-0.5" style="color: #4a6741;">утром</span>
+                        <span style="color: #b5ceaf;">Завтрак, купание, прогулки по лесу</span>
+                    </div>
+                    <div class="flex gap-4">
+                        <span class="text-sm w-20 shrink-0 mt-0.5" style="color: #4a6741;">днём</span>
+                        <span style="color: #b5ceaf;">Настолки, активности на голосование</span>
+                    </div>
+                    <div class="flex gap-4">
+                        <span class="text-sm w-20 shrink-0 mt-0.5" style="color: #4a6741;">вечером</span>
+                        <span style="color: #b5ceaf;">Баня, ужин, звёздное небо</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item pl-14">
+                <div class="absolute left-0 top-0 w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm shrink-0"
+                     style="background: #2e4a38; color: #6a8f60;">3</div>
+                <p class="text-xs font-semibold uppercase tracking-widest mb-1" style="color: #6a8f60;">Сб, 26 июля</p>
+                <h3 class="text-white text-2xl font-bold mb-4">Выезд</h3>
+                <div class="space-y-2.5">
+                    <div class="flex gap-4">
+                        <span class="text-sm w-20 shrink-0 mt-0.5" style="color: #4a6741;">утром</span>
+                        <span style="color: #b5ceaf;">Завтрак, последнее купание, сборы</span>
+                    </div>
+                    <div class="flex gap-4">
+                        <span class="text-sm w-20 shrink-0 mt-0.5" style="color: #4a6741;">до 12:00</span>
+                        <span style="color: #b5ceaf;">Выезд. Везём воспоминания домой.</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- ════════════ BUDGET ════════════ -->
+<section id="budget" class="py-20 px-4 sm:px-6" style="background: rgba(10,20,14,0.4);">
+    <div class="max-w-5xl mx-auto">
+        <div class="reveal mb-10">
+            <p class="section-label">04 / Бюджет</p>
+            <h2 class="text-4xl md:text-5xl font-bold text-white mb-4">Считаем честно</h2>
+            <p class="text-lg max-w-xl" style="color: #8db082;">
+                Все расходы фиксируем и делим поровну через Splitwise.
+            </p>
+        </div>
+
+        <div class="reveal grid sm:grid-cols-2 md:grid-cols-3 gap-4 max-w-2xl mb-6">
+            <div class="card rounded-2xl p-5">
+                <p class="section-label">Проживание</p>
+                <p class="text-white font-bold text-xl">2 ночи</p>
+                <p class="text-sm mt-1" style="color: #6a8f60;">база на всю группу</p>
+            </div>
+            <div class="card rounded-2xl p-5">
+                <p class="section-label">Еда</p>
+                <p class="text-white font-bold text-xl">Общий котёл</p>
+                <p class="text-sm mt-1" style="color: #6a8f60;">закупаемся вместе</p>
+            </div>
+            <div class="card rounded-2xl p-5">
+                <p class="section-label">Транспорт</p>
+                <p class="text-white font-bold text-xl">В процессе</p>
+                <p class="text-sm mt-1" style="color: #6a8f60;">старт от офиса</p>
+            </div>
+        </div>
+
+        <div class="reveal card rounded-2xl p-6 max-w-md flex items-start gap-4">
+            <div class="text-3xl shrink-0">💸</div>
+            <div class="flex-1">
+                <p class="text-white font-semibold mb-1">Итого на человека — TBD</p>
+                <p class="text-sm mb-4" style="color: #6a8f60;">
+                    Ссылка на группу Splitwise появится ближе к поездке.
+                </p>
+                <!-- TODO: замени href на реальную ссылку Splitwise -->
+                <a href="#" class="btn-gold text-sm py-2.5 px-5" style="border-radius: 0.5rem;">
+                    Открыть Splitwise →
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ════════════ CHECKLIST ════════════ -->
+<section id="checklist" class="py-20 px-4 sm:px-6" x-data="checklist()">
+    <div class="max-w-5xl mx-auto">
+        <div class="reveal mb-10">
+            <p class="section-label">05 / Чек-лист</p>
+            <h2 class="text-4xl md:text-5xl font-bold text-white mb-4">Что взять</h2>
+            <p class="text-lg max-w-xl" style="color: #8db082;">
+                Нажимай — отмечай, что уже собрал.
+            </p>
+        </div>
+
+        <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-2.5 max-w-3xl">
+            <template x-for="(item, i) in items" :key="i">
+                <div class="card rounded-xl p-4 flex items-center gap-3 checklist-item"
+                     :class="item.done ? 'done' : ''"
+                     @click="items[i].done = !items[i].done">
+                    <div class="w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-all"
+                         :style="item.done
+                             ? 'background:#d4a853; border-color:#d4a853;'
+                             : 'border-color:#4a6741; background:transparent;'">
+                        <svg x-show="item.done" class="w-2.5 h-2.5" style="color:#0f1c14;"
+                             fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3.5" d="M5 13l4 4L19 7"/>
+                        </svg>
+                    </div>
+                    <span class="text-sm"
+                          :class="item.done ? 'line-through' : ''"
+                          :style="item.done ? 'color:#4a6741;' : 'color:#b5ceaf;'"
+                          x-text="item.label">
+                    </span>
+                </div>
+            </template>
+        </div>
+
+        <button @click="items.forEach(i => i.done = false)"
+                class="mt-5 text-sm transition-colors hover:text-white"
+                style="color: #4a6741;">
+            Сбросить всё
+        </button>
+    </div>
+</section>
+
+
+<!-- ════════════ RULES ════════════ -->
+<section id="rules" class="py-20 px-4 sm:px-6" style="background: rgba(10,20,14,0.4);">
+    <div class="max-w-5xl mx-auto">
+        <div class="reveal mb-10">
+            <p class="section-label">06 / Правила</p>
+            <h2 class="text-4xl md:text-5xl font-bold text-white mb-4">Их немного</h2>
+        </div>
+
+        <div class="reveal grid sm:grid-cols-2 gap-4 max-w-2xl">
+            <div class="card rounded-2xl p-5 flex gap-4">
+                <span class="text-2xl shrink-0">😊</span>
+                <div>
+                    <h4 class="text-white font-semibold mb-1">Хорошее настроение</h4>
+                    <p class="text-sm" style="color: #6a8f60;">Главное правило. Берём с собой, не теряем.</p>
+                </div>
+            </div>
+            <div class="card rounded-2xl p-5 flex gap-4">
+                <span class="text-2xl shrink-0">🤝</span>
+                <div>
+                    <h4 class="text-white font-semibold mb-1">Уважаем пространство</h4>
+                    <p class="text-sm" style="color: #6a8f60;">Территорию, соседей и друг друга.</p>
+                </div>
+            </div>
+            <div class="card rounded-2xl p-5 flex gap-4">
+                <span class="text-2xl shrink-0">🗳️</span>
+                <div>
+                    <h4 class="text-white font-semibold mb-1">Активности — голосованием</h4>
+                    <p class="text-sm" style="color: #6a8f60;">Предлагаем идеи, решаем вместе.</p>
+                </div>
+            </div>
+            <div class="card rounded-2xl p-5 flex gap-4">
+                <span class="text-2xl shrink-0">🚪</span>
+                <div>
+                    <h4 class="text-white font-semibold mb-1">Заезд с 14:00, выезд до 12:00</h4>
+                    <p class="text-sm" style="color: #6a8f60;">Уважаем регламент базы.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ════════════ FAQ ════════════ -->
+<section id="faq" class="py-20 px-4 sm:px-6" x-data="faqData()">
+    <div class="max-w-5xl mx-auto">
+        <div class="reveal mb-10">
+            <p class="section-label">07 / FAQ</p>
+            <h2 class="text-4xl md:text-5xl font-bold text-white mb-4">Вопросы</h2>
+        </div>
+
+        <div class="max-w-2xl space-y-2">
+            <template x-for="(item, i) in faqs" :key="i">
+                <div class="card rounded-xl overflow-hidden">
+                    <button
+                        @click="open = open === i ? null : i"
+                        class="w-full flex items-center justify-between p-5 text-left transition-colors"
+                        :style="open === i
+                            ? 'background: rgba(74,103,65,0.15);'
+                            : 'background: transparent;'">
+                        <span class="text-white font-medium pr-4" x-text="item.q"></span>
+                        <svg class="w-5 h-5 shrink-0 transition-transform"
+                             :style="open === i ? 'transform: rotate(180deg); color:#d4a853;' : 'color:#4a6741;'"
+                             fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </button>
+                    <div class="faq-answer px-5" :class="open === i ? 'open' : ''">
+                        <p class="pb-5 text-sm leading-relaxed" style="color: #8db082;" x-text="item.a"></p>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </div>
+</section>
+
+
+<!-- ════════════ FOOTER ════════════ -->
+<footer class="py-16 px-4 sm:px-6" style="background: #0f1c14; border-top: 1px solid #2e4a38;">
+    <div class="max-w-5xl mx-auto text-center">
+        <p class="text-3xl font-bold text-white mb-2">До встречи в Карелии 🌲</p>
+        <p class="text-lg mb-8" style="color: #6a8f60;">24 — 26 июля 2025 · Бухта Терву · Ладога</p>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center items-center">
+            <a href="https://t.me/ruslansd" target="_blank" class="btn-gold">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                </svg>
+                Написать @ruslansd
+            </a>
+            <!-- TODO: замени href на реальную ссылку чата -->
+            <a href="#" class="btn-outline">
+                Чат поездки →
+            </a>
+        </div>
+        <p class="mt-10 text-xs" style="color: #2e4a38;">
+            Все вопросы — в Telegram · Организатор: @ruslansd
+        </p>
+    </div>
+</footer>
+
+
+<!-- ════════════ SCRIPTS ════════════ -->
+<script>
+    // ── Checklist ──
+    function checklist() {
+        return {
+            items: [
+                { label: 'Паспорт / документы',         done: false },
+                { label: 'Наличные (небольшой запас)',   done: false },
+                { label: 'Удобная обувь для леса',       done: false },
+                { label: 'Дождевик или ветровка',        done: false },
+                { label: 'Тёплая кофта (ночью прохладно)', done: false },
+                { label: 'Купальник / плавки',           done: false },
+                { label: 'Полотенце',                    done: false },
+                { label: 'Средство от комаров',          done: false },
+                { label: 'Солнцезащитный крем',          done: false },
+                { label: 'Зарядка + павербанк',          done: false },
+                { label: 'Любимая настолка',             done: false },
+                { label: 'Хорошее настроение',           done: false },
+            ]
+        }
+    }
+
+    // ── FAQ ──
+    function faqData() {
+        return {
+            open: null,
+            faqs: [
+                {
+                    q: 'Когда нужно оплатить?',
+                    a: 'Ссылка на Splitwise появится ближе к поездке — посчитаем всё вместе и разделим поровну.'
+                },
+                {
+                    q: 'Откуда выезжаем?',
+                    a: 'Стартуем от офиса Яндекса. Точное время и место сбора придут в чате ближе к дате.'
+                },
+                {
+                    q: 'Что с едой?',
+                    a: 'Едим вместе, закупаемся на общий котёл. Если есть аллергии или ограничения — напиши организатору заранее.'
+                },
+                {
+                    q: 'Можно приехать позже или уехать раньше?',
+                    a: 'Лучше по расписанию, но если что-то срочное — договоримся. Напиши в чат.'
+                },
+                {
+                    q: 'Есть ли Wi-Fi?',
+                    a: 'Лучше рассчитывать только на мобильный интернет. Мы в Карелии — это скорее плюс.'
+                },
+                {
+                    q: 'Нужно ли что-то организовывать самому?',
+                    a: 'Нет, всё основное берём на себя. Твоя задача — приехать, предложить активность, если хочешь.'
+                },
+            ]
+        }
+    }
+
+    // ── Scroll reveal ──
+    const observer = new IntersectionObserver(
+        entries => entries.forEach(e => {
+            if (e.isIntersecting) {
+                e.target.classList.add('visible');
+                observer.unobserve(e.target);
+            }
+        }),
+        { threshold: 0.12 }
+    );
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
